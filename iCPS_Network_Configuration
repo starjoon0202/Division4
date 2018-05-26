@@ -1,0 +1,173 @@
+{
+  "service-function-chains": {
+    "service-function-chain": [
+      {
+        "name": "iCPS-Central",
+        "sfc-service-function": [
+          {
+            "name": "VM",
+            "type": "service-function-type:VM",
+            "order": 0
+          }
+        ]
+      },
+      {
+        "name": "iCPS-Edge",
+        "sfc-service-function": [
+          {
+            "name": "VM",
+            "type": "service-function-type:VM",
+            "order": 0
+          }
+        ]
+      },
+      {
+        "name": "iCPS-Central-ping",
+        "sfc-service-function": [
+          {
+            "name": "VM",
+            "type": "service-function-type:VM",
+            "order": 0
+          }
+        ]
+      },
+      {
+        "name": "iCPS-Edge-ping",
+        "sfc-service-function": [
+          {
+            "name": "VM",
+            "type": "service-function-type:VM",
+            "order": 0
+          }
+        ]
+      }
+    ]
+  }
+};
+{
+  "service-functions": {
+    "service-function": [
+      {
+        "name": "VM-Central",
+        "sf-data-plane-locator": [
+          {
+            "name": "vm-central-dpl",
+            "transport": "service-locator:vxlan-gpe",
+            "service-function-forwarder": "Central-Switch",
+            "ip": "192.168.0.70",
+            "port": 6633
+          }
+        ],
+        "nsh-aware": true,
+        "rest-uri": "http://192.168.0.70:5000",
+        "ip-mgmt-address": "192.168.0.70",
+        "type": "service-function-type:VM"
+      },
+      {
+        "name": "VM-Edge",
+        "sf-data-plane-locator": [
+          {
+            "name": "vm-edge-dpl",
+            "transport": "service-locator:vxlan-gpe",
+            "service-function-forwarder": "Edge-Switch",
+            "ip": "192.168.0.72",
+            "port": 6633
+          }
+        ],
+        "nsh-aware": true,
+        "rest-uri": "http://192.168.0.72:5000",
+        "ip-mgmt-address": "192.168.0.72",
+        "type": "service-function-type:VM"
+      }
+     ]
+  }
+};
+{
+  "service-function-forwarders": {
+    "service-function-forwarder": [
+      {
+        "name": "Central-Switch",
+        "sff-data-plane-locator": [
+          {
+            "name": "central-switch-dpl",
+            "service-function-forwarder-ovs:ovs-options": {
+              "nsi": "flow",
+              "dst-port": "6633",
+              "key": "flow",
+              "nshc2": "flow",
+              "remote-ip": "flow",
+              "nshc1": "flow",
+              "nsp": "flow",
+              "nshc4": "flow",
+              "nshc3": "flow"
+            },
+            "data-plane-locator": {
+              "port": 6633,
+              "ip": "192.168.0.69",
+              "transport": "service-locator:vxlan-gpe"
+            },
+            "service-function-forwarder-ovs:ovs-bridge": {
+              "bridge-name": "br-2"
+            }
+          }
+        ],
+        "service-function-dictionary": [
+          {
+            "name": "VM-Central",
+            "sff-sf-data-plane-locator": {
+              "sf-dpl-name": "vm-central-dpl",
+              "sff-dpl-name": "central-switch-dpl"
+            }
+          }
+         ],
+        "ip-mgmt-address": "192.168.0.69",
+        "service-function-forwarder-ovs:ovs-bridge": {
+          "bridge-name": "br-2"
+        },
+        "service-node": ""
+      },
+      {
+        "name": "Edge-Switch",
+        "sff-data-plane-locator": [
+          {
+            "name": "edge-switch-dpl",
+            "service-function-forwarder-ovs:ovs-options": {
+              "nsi": "flow",
+              "dst-port": "6633",
+              "key": "flow",
+              "nshc2": "flow",
+              "remote-ip": "flow",
+              "nshc1": "flow",
+              "nsp": "flow",
+              "nshc4": "flow",
+              "nshc3": "flow"
+            },
+            "data-plane-locator": {
+              "port": 6633,
+              "ip": "192.168.0.73",
+              "transport": "service-locator:vxlan-gpe"
+            },
+            "service-function-forwarder-ovs:ovs-bridge": {
+              "bridge-name": "br-2"
+            }
+          }
+        ],
+        "service-function-dictionary": [
+          {
+            "name": "VM-Edge",
+            "sff-sf-data-plane-locator": {
+              "sf-dpl-name": "vm-edge-dpl",
+              "sff-dpl-name": "edge-switch-dpl"
+            }
+          }
+         ],
+        "ip-mgmt-address": "192.168.0.73",
+        "service-function-forwarder-ovs:ovs-bridge": {
+          "bridge-name": "br-2"
+        },
+        "service-node": ""
+      }
+    ]
+  }
+};
+
